@@ -507,6 +507,53 @@ body{
     line-height: 1.6;
 }
 
+/* Social Links styling */
+.social-links-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 20px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.social-icon:hover {
+    transform: translateY(-4px) scale(1.15);
+    color: #fff;
+    border-color: transparent;
+}
+
+/* Platform-specific premium hover glows and colors */
+.social-icon.github:hover {
+    background: #24292e;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    color: #fff;
+}
+
+.social-icon.instagram:hover {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+    box-shadow: 0 0 15px rgba(214, 36, 159, 0.6);
+    color: #fff;
+}
+
+.social-icon.linkedin:hover {
+    background: #0077b5;
+    box-shadow: 0 0 15px rgba(0, 119, 181, 0.6);
+    color: #fff;
+}
+
 .footer-links h4 {
     font-size: 16px;
     font-weight: 600;
