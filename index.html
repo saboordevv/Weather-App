@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>WeatherX | Modern Weather App</title>
+    <title>SkyCast | Modern Weather App</title>
 
     <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,31 +26,70 @@
     <!-- Animated Background -->
     <div class="background-blur"></div>
 
+    <!-- Top Header -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo">
+                <i class='bx bx-cloud-lightning logo-icon'></i>
+                <span class="brand-name">SkyCast</span>
+            </div>
+            <div class="unit-toggle">
+                <button id="btnCelsius" class="toggle-btn active">°C</button>
+                <button id="btnFahrenheit" class="toggle-btn">°F</button>
+            </div>
+        </div>
+    </header>
+
     <main class="app">
 
         <!-- Search Card -->
         <section class="search-card">
 
-            <h1>
-                <i class='bx bx-cloud-lightning'></i>
-                WeatherX
-            </h1>
+            <h2>
+                <i class='bx bx-search-alt'></i>
+                Find Weather Info
+            </h2>
 
             <div class="search-box">
 
-                <i class='bx bx-search'></i>
+                <div class="input-wrapper">
+                    <i class='bx bx-search'></i>
+                    <input
+                        id="location"
+                        type="text"
+                        placeholder="Search any city...">
+                </div>
 
-                <input
-                    id="location"
-                    type="text"
-                    placeholder="Search any city...">
-
-                <button id="searchBtn">
-                    Search
-                </button>
+                <div class="button-group">
+                    <button id="searchBtn">
+                        Search
+                    </button>
+                    <button id="locationBtn" title="Use Current Location">
+                        <i class='bx bx-current-location'></i>
+                    </button>
+                </div>
 
             </div>
 
+            <!-- Recent Searches -->
+            <div class="recent-searches-container" id="recentSearches">
+                <span class="recent-title"><i class='bx bx-history'></i> Recent:</span>
+                <div class="recent-tags" id="recentTags">
+                    <!-- Dynamic tags will be injected here -->
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Smart Recommendation Card -->
+        <section class="recommendation-card hide" id="recommendationCard">
+            <div class="recommendation-content">
+                <div class="recommendation-header">
+                    <i class='bx bx-bulb recommendation-icon'></i>
+                    <h4>SkyCast Smart Recommendation</h4>
+                </div>
+                <p id="recommendationText">Checking conditions to give you the best advice...</p>
+            </div>
         </section>
 
         <!-- Main Weather Card -->
@@ -91,7 +130,7 @@
 
                 <div>
 
-                    <h1 class="temperature">
+                    <h1 class="temperature" id="mainTemp">
                         28°
                     </h1>
 
@@ -216,6 +255,34 @@
         </section>
 
     </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3><i class='bx bx-cloud-lightning logo-icon-sm'></i> SkyCast</h3>
+                <p>Your ultimate companion for real-time weather forecasts, hourly predictions, and smart weather recommendations. Designed with a clean glassmorphic mobile-first layout.</p>
+            </div>
+
+            <div class="footer-links">
+                <h4>Contact Developer</h4>
+                <p>Have suggestions or need a custom web application? Click below to chat directly with me on WhatsApp!</p>
+                <a href="https://wa.me/923168462319?text=Hi%20Abdul%20Saboor!%20I%20am%20using%20your%20SkyCast%20Weather%20App%20and%20wanted%20to%20get%20in%20touch." target="_blank" class="whatsapp-footer-btn">
+                    <i class='bx bxl-whatsapp'></i> Chat on WhatsApp
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright &copy; 2026 Abdul Saboor. All rights reserved.</p>
+            <p>Site Name: <span class="author-name">SkyCast</span></p>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Widget -->
+    <a href="https://wa.me/923168462319?text=Hi%20Abdul%20Saboor!%20I%20am%20using%20your%20SkyCast%20Weather%20App%20and%20wanted%20to%20get%20in%20touch." class="whatsapp-floating" target="_blank" title="Chat on WhatsApp">
+        <i class='bx bxl-whatsapp'></i>
+        <span class="pulse"></span>
+    </a>
 
     <!-- Loading -->
 
