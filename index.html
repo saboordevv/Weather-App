@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>WeatherX | Modern Weather App</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Animated Background -->
+    <div class="background-blur"></div>
+
+    <main class="app">
+
+        <!-- Search Card -->
+        <section class="search-card">
+
+            <h1>
+                <i class='bx bx-cloud-lightning'></i>
+                WeatherX
+            </h1>
+
+            <div class="search-box">
+
+                <i class='bx bx-search'></i>
+
+                <input
+                    id="location"
+                    type="text"
+                    placeholder="Search any city...">
+
+                <button id="searchBtn">
+                    Search
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- Main Weather Card -->
+        <section class="weather-card">
+
+            <div class="weather-header">
+
+                <div>
+
+                    <h2 class="city-name">
+                        Bahawalpur
+                    </h2>
+
+                    <p class="country">
+                        Pakistan
+                    </p>
+
+                </div>
+
+                <div class="time">
+
+                    <i class='bx bx-time'></i>
+
+                    <span class="local-time">
+                        12:30 PM
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="weather-main">
+
+                <img
+                    src="images/cloud.png"
+                    class="weather-icon"
+                    alt="Weather">
+
+                <div>
+
+                    <h1 class="temperature">
+                        28°
+                    </h1>
+
+                    <p class="description">
+                        Broken Clouds
+                    </p>
+
+                    <span class="feels-like">
+                        Feels Like 30°C
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Weather Details -->
+
+        <section class="details-grid">
+
+            <div class="card humidity">
+
+                <i class='bx bx-water'></i>
+
+                <h3>Humidity</h3>
+
+                <span class="info-humidity">0%</span>
+
+            </div>
+
+            <div class="card wind">
+
+                <i class='bx bx-wind'></i>
+
+                <h3>Wind</h3>
+
+                <span class="info-wind">0 km/h</span>
+
+            </div>
+
+            <div class="card pressure">
+
+                <i class='bx bx-bar-chart-alt'></i>
+
+                <h3>Pressure</h3>
+
+                <span class="info-pressure">0 hPa</span>
+
+            </div>
+
+            <div class="card visibility">
+
+                <i class='bx bx-show'></i>
+
+                <h3>Visibility</h3>
+
+                <span class="info-visibility">0 km</span>
+
+            </div>
+
+            <div class="card sunrise">
+
+                <i class='bx bx-sun'></i>
+
+                <h3>Sunrise</h3>
+
+                <span class="info-sunrise">--:--</span>
+
+            </div>
+
+            <div class="card sunset">
+
+                <i class='bx bx-moon'></i>
+
+                <h3>Sunset</h3>
+
+                <span class="info-sunset">--:--</span>
+
+            </div>
+
+            <div class="card feels">
+
+                <i class='bx bx-thermometer'></i>
+
+                <h3>Feels Like</h3>
+
+                <span class="info-feels">0°C</span>
+
+            </div>
+
+            <div class="card cloud">
+
+                <i class='bx bx-cloud'></i>
+
+                <h3>Clouds</h3>
+
+                <span class="info-cloud">0%</span>
+
+            </div>
+
+        </section>
+
+        <!-- Forecast -->
+
+        <section class="forecast">
+
+            <h2>
+
+                <i class='bx bx-calendar'></i>
+
+                Hourly Forecast
+
+            </h2>
+
+            <div class="forecast-container">
+
+                <!-- JS will generate forecast cards here -->
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Loading -->
+
+    <div class="loading">
+
+        <div class="loader"></div>
+
+        <p>Loading Weather...</p>
+
+    </div>
+
+    <!-- Toast -->
+
+    <div class="toast">
+
+        <i class='bx bx-check-circle'></i>
+
+        <span class="toast-message">
+
+            Success
+
+        </span>
+
+    </div>
+
+    <script src="index.js"></script>
+
+</body>
+
+</html>
