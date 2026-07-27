@@ -14,6 +14,7 @@ const API_KEY = "ee0f764930a249fd828134920262107";
 let weatherData = null; // Holds the parsed weather data object from API
 let currentUnit = localStorage.getItem("skycast_unit") || "C"; // 'C' or 'F'
 let recentSearches = JSON.parse(localStorage.getItem("skycast_recent") || "[]");
+let suggestionTimeout = null;
 
 // =====================
 // DOM Elements
@@ -21,6 +22,11 @@ let recentSearches = JSON.parse(localStorage.getItem("skycast_recent") || "[]");
 const locationInput = document.getElementById("location");
 const searchBtn = document.getElementById("searchBtn");
 const locationBtn = document.getElementById("locationBtn");
+
+const suggestionsDropdown = document.getElementById("suggestionsDropdown");
+const searchErrorAlert = document.getElementById("searchErrorAlert");
+const searchErrorText = document.getElementById("searchErrorText");
+const closeErrorBtn = document.getElementById("closeErrorBtn");
 
 const cityName = document.querySelector(".city-name");
 const country = document.querySelector(".country");
@@ -114,13 +120,33 @@ function renderRecentSearches() {
     recentSearches.forEach(city => {
         const tag = document.createElement("span");
         tag.className = "recent-tag";
-        tag.innerHTML = `<i class='bx bx-map'></i> ${city}`;
-        tag.addEventListener("click", () => {
+        tag.innerHTML = `
+            <span class="tag-label"><i class='bx bx-map'></i> ${city}</span>
+            <i class='bx bx-x remove-tag' title="Remove ${city}"></i>
+        `;
+
+        const label = tag.querySelector(".tag-label");
+        label.addEventListener("click", () => {
+            hideSuggestions();
+            hideErrorAlert();
             locationInput.value = city;
             getWeather(city);
         });
+
+        const removeBtn = tag.querySelector(".remove-tag");
+        removeBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            removeRecentSearch(city);
+        });
+
         recentTagsContainer.appendChild(tag);
     });
+}
+
+function removeRecentSearch(city) {
+    recentSearches = recentSearches.filter(item => item.toLowerCase() !== city.toLowerCase());
+    localStorage.setItem("skycast_recent", JSON.stringify(recentSearches));
+    renderRecentSearches();
 }
 
 function addRecentSearch(city) {
@@ -249,6 +275,12 @@ async function getWeather(city) {
         return;
     }
 
+    // Clear any previous spelling error alert and suggestions
+    hideErrorAlert();
+    clearTimeout(suggestionTimeout);
+    hideSuggestions();
+    locationInput.blur();
+
     showLoading();
 
     try {
@@ -257,7 +289,7 @@ async function getWeather(city) {
         );
 
         if (!response.ok) {
-            throw new Error("City not found.");
+            throw new Error(`We couldn't find "${city}". Please check your spelling or search from the suggestions list.`);
         }
 
         const data = await response.json();
@@ -272,7 +304,8 @@ async function getWeather(city) {
         renderWeather();
         showToast(`Weather updated for ${data.location.name}`);
     } catch (error) {
-        showToast(error.message);
+        showToast("Search failed!");
+        showErrorAlert(error.message);
     } finally {
         hideLoading();
     }
@@ -331,12 +364,86 @@ function getCurrentLocation() {
 }
 
 // =========================================
+// Error & Suggestion Handlers
+// =========================================
+function showErrorAlert(message) {
+    searchErrorText.textContent = message;
+    searchErrorAlert.style.display = "flex";
+}
+
+function hideErrorAlert() {
+    searchErrorAlert.style.display = "none";
+}
+
+async function fetchSuggestions(query) {
+    try {
+        const response = await fetch(
+            `https://api.weatherapi.com/v1/search.json?key=${API_KEY}&q=${encodeURIComponent(query)}`
+        );
+        if (!response.ok) {
+            throw new Error("Unable to fetch suggestions");
+        }
+        const data = await response.json();
+
+        // Prevent race conditions: only show suggestions if the input is still active/focused
+        if (document.activeElement !== locationInput || locationInput.value.trim() === "") {
+            hideSuggestions();
+            return;
+        }
+
+        renderSuggestions(data);
+    } catch (err) {
+        console.error("Error fetching suggestions:", err);
+        hideSuggestions();
+    }
+}
+
+function renderSuggestions(suggestions) {
+    if (!suggestions || suggestions.length === 0) {
+        hideSuggestions();
+        return;
+    }
+
+    suggestionsDropdown.innerHTML = "";
+    suggestionsDropdown.style.display = "block";
+
+    suggestions.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "suggestion-item";
+
+        const details = [item.region, item.country].filter(Boolean).join(", ");
+
+        div.innerHTML = `
+            <i class='bx bx-map-pin'></i>
+            <div class="suggestion-info">
+                <span class="suggestion-city">${item.name}</span>
+                <span class="suggestion-region">${details}</span>
+            </div>
+        `;
+
+        div.addEventListener("click", () => {
+            locationInput.value = item.name;
+            hideSuggestions();
+            getWeather(item.name);
+        });
+
+        suggestionsDropdown.appendChild(div);
+    });
+}
+
+function hideSuggestions() {
+    suggestionsDropdown.style.display = "none";
+    suggestionsDropdown.innerHTML = "";
+}
+
+// =========================================
 // Event Listeners Setup
 // =========================================
 
 // Search button click
 searchBtn.addEventListener("click", () => {
     const city = locationInput.value.trim();
+    hideSuggestions();
     getWeather(city);
 });
 
@@ -344,7 +451,39 @@ searchBtn.addEventListener("click", () => {
 locationInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
         const city = locationInput.value.trim();
+        hideSuggestions();
         getWeather(city);
+    }
+});
+
+// Autocomplete logic on typing
+locationInput.addEventListener("input", (e) => {
+    const query = e.target.value.trim();
+
+    // Typing clears previous spelling error alerts
+    hideErrorAlert();
+
+    clearTimeout(suggestionTimeout);
+
+    if (query.length < 2) {
+        hideSuggestions();
+        return;
+    }
+
+    suggestionTimeout = setTimeout(() => {
+        fetchSuggestions(query);
+    }, 300);
+});
+
+// Dismiss error alert manually
+closeErrorBtn.addEventListener("click", () => {
+    hideErrorAlert();
+});
+
+// Hide suggestions when clicking outside input or dropdown
+document.addEventListener("click", (e) => {
+    if (!locationInput.contains(e.target) && !suggestionsDropdown.contains(e.target)) {
+        hideSuggestions();
     }
 });
 

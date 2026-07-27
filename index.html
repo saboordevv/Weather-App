@@ -50,6 +50,16 @@
                 Find Weather Info
             </h2>
 
+            <!-- Stylized Error Alert Box -->
+            <div class="search-error-alert" id="searchErrorAlert">
+                <i class='bx bx-error-circle error-alert-icon'></i>
+                <div class="error-alert-content">
+                    <h4>City Not Found!</h4>
+                    <p id="searchErrorText">Please check the spelling of your city or select a valid city from the suggestions list.</p>
+                </div>
+                <button class="close-error-btn" id="closeErrorBtn" title="Dismiss">&times;</button>
+            </div>
+
             <div class="search-box">
 
                 <div class="input-wrapper">
@@ -57,7 +67,10 @@
                     <input
                         id="location"
                         type="text"
-                        placeholder="Search any city...">
+                        placeholder="Search any city..."
+                        autocomplete="off">
+                    <!-- Autocomplete Suggestions Dropdown -->
+                    <div class="suggestions-dropdown" id="suggestionsDropdown"></div>
                 </div>
 
                 <div class="button-group">
